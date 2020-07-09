@@ -1,66 +1,125 @@
-html, body {
-	position: relative;
-	width: 100%;
-	height: 100%;
+html,
+body {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 body {
-	color: #333;
-	margin: 0;
-	padding: 8px;
-	box-sizing: border-box;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  color: rgb(5, 5, 5);
+  margin: 0;
+  padding: 8px;
+  box-sizing: border-box;
+  font-size: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+main {
+  padding-bottom: 50px;
+}
+
+aside {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 72px;
+  background: linear-gradient(to right, #fc05b2, rgb(255, 94, 0));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 75px;
 }
 
 a {
-	color: rgb(0,100,200);
-	text-decoration: none;
+  color: rgb(0, 100, 200);
+  text-decoration: none;
 }
 
 a:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 a:visited {
-	color: rgb(0,80,160);
+  color: rgb(0, 80, 160);
 }
 
 label {
-	display: block;
+  display: block;
 }
 
-input, button, select, textarea {
-	font-family: inherit;
-	font-size: inherit;
-	padding: 0.4em;
-	margin: 0 0 0.5em 0;
-	box-sizing: border-box;
-	border: 1px solid #ccc;
-	border-radius: 2px;
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0.4em;
+  margin: 0 0 0.5em 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 2px;
 }
 
 input:disabled {
-	color: #ccc;
+  color: #ccc;
 }
 
 input[type="range"] {
-	height: 0;
+  height: 0;
 }
 
 button {
-	color: #333;
-	background-color: #f4f4f4;
-	outline: none;
+  color: #333;
+  background-color: #f4f4f4;
+  outline: none;
 }
 
 button:disabled {
-	color: #999;
+  color: #999;
 }
 
 button:not(:disabled):active {
-	background-color: #ddd;
+  background-color: #ddd;
 }
 
 button:focus {
-	border-color: #666;
+  border-color: #666;
+}
+
+img,
+p {
+  margin-top: 15px;
+}
+
+img {
+  display: block;
+  width: 80%;
+  margin: auto;
+}
+
+iframe {
+  margin-top: 30px;
+}
+
+section {
+  margin: auto;
+  max-width: 90vw;
+}
+
+@media screen and (min-width: 768px) {
+  img {
+    width: 100%;
+  }
+  section {
+    max-width: 50vw;
+  }
 }

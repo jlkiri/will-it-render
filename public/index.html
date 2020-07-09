@@ -1,18 +1,219 @@
-<!DOCTYPE html>
+<!DOCTYPE html />
 <html lang="en">
-<head>
-	<meta charset='utf-8'>
-	<meta name='viewport' content='width=device-width,initial-scale=1'>
-
-	<title>Svelte app</title>
-
-	<link rel='icon' type='image/png' href='/favicon.png'>
-	<link rel='stylesheet' href='/global.css'>
-	<link rel='stylesheet' href='/build/bundle.css'>
-
-	<script defer src='/build/bundle.js'></script>
-</head>
-
-<body>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Will it render?</title>
+    <meta property="og:url" content="https://will-it-render.vercel.app/" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="Will it render? | React rendering cheatsheet"
+    />
+    <meta name="Description" content="React rendering cheatsheet" />
+    <meta property="og:description" content="React rendering cheatsheet" />
+    <meta
+      property="og:image"
+      content="https://will-it-render.vercel.app/social.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="https://twitter.com/virtualkirill/" />
+    <meta
+      name="twitter:title"
+      content="Will it render? | React rendering cheatsheet"
+    />
+    <meta name="twitter:description" content="React rendering cheatsheet" />
+    <meta
+      name="twitter:image"
+      content="https://will-it-render.vercel.app/social.png"
+    />
+    <link rel="stylesheet" href="/global.css" />
+  </head>
+  <body>
+    <aside>
+      By <a href="https://twitter.com/virtualkirill">Kirill Vasiltsov</a>
+    </aside>
+    <main>
+      <h1>Will it render?</h1>
+      <h2>React rendering cheatsheet</h2>
+      <section>
+        This is a visual aid for
+        <a
+          href="https://blog.isquaredsoftware.com/2020/05/blogged-answers-a-mostly-complete-guide-to-react-rendering-behavior/"
+          >the very good article about React's rendering behaviour</a
+        >
+        by
+        <a href="https://twitter.com/acemarke">Mark Erikson</a>. Below are
+        drawings with live Codesandbox examples which you can explore and play
+        with. If you want more detail, I encourage you to read the original
+        article.
+      </section>
+      <section>
+        <h2>Example 1: Parent component is rendered</h2>
+        <p>
+          In general, a component is rendered if its parent component is
+          rendered (for whatever reason). If the parent is not rendered, then
+          the component will be rendered only if it triggered a re-render with a
+          state setter or uses a context value that changed (more on context
+          below).
+        </p>
+        <img src="/simple-render.png" />
+        <img src="/skipped-render.png" />
+        <h3>Explore with Codesandbox</h3>
+        <iframe
+          src="https://codesandbox.io/embed/simple-react-rendering-example-2ylgh?codemirror=1&fontsize=14&hidenavigation=1&module=%2Fsrc%2FApp.js&theme=dark&view=preview&hidedevtools=1&
+        hidenavigation=1&runonclick=1"
+          style="
+            width: 100%;
+            height: 500px;
+            border: 0;
+            border-radius: 6px;
+            overflow: hidden;
+          "
+          title="Simple rendering example"
+          allow="accelerometer; ambient-light-sensor; camera; encrypted-media;
+        geolocation; gyroscope; hid; microphone; midi; payment; usb; vr;
+        xr-spatial-tracking"
+          sandbox="allow-autoplay allow-forms allow-modals allow-popups
+        allow-presentation allow-same-origin allow-scripts"
+        ></iframe>
+      </section>
+      <section>
+        <h2>
+          Example 2: Context value changed (inefficient)
+        </h2>
+        <p>
+          A component is rendered if it uses a context value and that value
+          changes. However since context naturally comes from a parent, any
+          change triggered by that parent will cause a cascading re-render of
+          the whole app.
+        </p>
+        <img src="/context-render.png" />
+        <iframe
+          src="https://codesandbox.io/embed/naive-context-rendering-example-vq0sw?codemirror=1&fontsize=14&hidenavigation=1&module=%2Fsrc%2FApp.js&theme=dark&view=preview&hidedevtools=1&
+        hidenavigation=1&runonclick=1"
+          style="
+            width: 100%;
+            height: 500px;
+            border: 0;
+            border-radius: 6px;
+            overflow: hidden;
+          "
+          title="Simple rendering example"
+          allow="accelerometer; ambient-light-sensor; camera; encrypted-media;
+        geolocation; gyroscope; hid; microphone; midi; payment; usb; vr;
+        xr-spatial-tracking"
+          sandbox="allow-autoplay allow-forms allow-modals allow-popups
+        allow-presentation allow-same-origin allow-scripts"
+        ></iframe>
+      </section>
+      <section>
+        <h2>Example 3: Context value changed (efficient)</h2>
+        <p>
+          To avoid cascading re-render we can use the same-element reference
+          technique. Simply speaking, React will not re-render a child if it
+          comes from props and its references the same element across renders.
+          If we put a context provider in another component that takes children
+          props, we can avoid unnecessary renders.
+        </p>
+        <img src="/same-element-ref.png" />
+        <h3>Explore with Codesandbox</h3>
+        <iframe
+          src="https://codesandbox.io/embed/same-element-reference-kjcsc?codemirror=1&fontsize=14&hidenavigation=1&module=%2Fsrc%2FApp.js&theme=dark&view=preview&hidedevtools=1&
+        hidenavigation=1&runonclick=1"
+          style="
+            width: 100%;
+            height: 500px;
+            border-radius: 6px;
+            overflow: hidden;
+          "
+          title="Simple rendering example"
+          allow="accelerometer; ambient-light-sensor; camera; encrypted-media;
+        geolocation; gyroscope; hid; microphone; midi; payment; usb; vr;
+        xr-spatial-tracking"
+          sandbox="allow-autoplay allow-forms allow-modals allow-popups
+        allow-presentation allow-same-origin allow-scripts"
+        ></iframe>
+      </section>
+      <section>
+        <h2>Example 4: Meaningless memoization</h2>
+        <p>
+          One way to avoid unnecessary re-render in React is to use React.memo.
+          However it does not make sense if we pass new references to it on each
+          render. Some examples are newly created objects or functions.
+        </p>
+        <img src="/meaningless-memo.png" />
+        <h3>Explore with Codesandbox</h3>
+        <iframe
+          src="https://codesandbox.io/embed/meaningless-memoization-dzr1s?codemirror=1&fontsize=14&hidenavigation=1&module=%2Fsrc%2FApp.js&theme=dark&view=preview&hidedevtools=1&
+        hidenavigation=1&runonclick=1"
+          style="
+            width: 100%;
+            height: 500px;
+            border-radius: 6px;
+            overflow: hidden;
+          "
+          title="Simple rendering example"
+          allow="accelerometer; ambient-light-sensor; camera; encrypted-media;
+        geolocation; gyroscope; hid; microphone; midi; payment; usb; vr;
+        xr-spatial-tracking"
+          sandbox="allow-autoplay allow-forms allow-modals allow-popups
+        allow-presentation allow-same-origin allow-scripts"
+        ></iframe>
+      </section>
+      <section>
+        <h2>Example 5: Meaningful memoization</h2>
+        <p>
+          To make use of React.memo we need to utilize tools that React provides
+          that memoized the very values we pass to React.memo. These are
+          useCallback and useMemo.
+        </p>
+        <img src="/meaningful-memo.png" />
+        <h3>Explore with Codesandbox</h3>
+        <iframe
+          src="https://codesandbox.io/embed/meaningful-memoization-t0qle?codemirror=1&fontsize=14&hidenavigation=1&module=%2Fsrc%2FApp.js&theme=dark&view=preview&hidedevtools=1&
+        hidenavigation=1&runonclick=1"
+          style="
+            width: 100%;
+            height: 500px;
+            border-radius: 6px;
+            overflow: hidden;
+          "
+          title="Simple rendering example"
+          allow="accelerometer; ambient-light-sensor; camera; encrypted-media;
+        geolocation; gyroscope; hid; microphone; midi; payment; usb; vr;
+        xr-spatial-tracking"
+          sandbox="allow-autoplay allow-forms allow-modals allow-popups
+        allow-presentation allow-same-origin allow-scripts"
+        ></iframe>
+      </section>
+      <section>
+        <h2>Example 6: Context and memoization</h2>
+        <p>
+          Another way to avoid unnecessary re-renders when using Context API is
+          to simply wrap the child of the context provider with React.memo. This
+          way we ensure that only those components which actually need the
+          context value are re-rendered when it changes.
+        </p>
+        <img src="/memo-context.png" />
+        <h3>Explore with Codesandbox</h3>
+        <iframe
+          src="https://codesandbox.io/embed/context-rendering-example-with-memo-iucib?codemirror=1&fontsize=14&hidenavigation=1&module=%2Fsrc%2FApp.js&theme=dark&view=preview&hidedevtools=1&
+        hidenavigation=1&runonclick=1"
+          style="
+            width: 100%;
+            height: 500px;
+            border-radius: 6px;
+            overflow: hidden;
+          "
+          title="Simple rendering example"
+          allow="accelerometer; ambient-light-sensor; camera; encrypted-media;
+        geolocation; gyroscope; hid; microphone; midi; payment; usb; vr;
+        xr-spatial-tracking"
+          sandbox="allow-autoplay allow-forms allow-modals allow-popups
+        allow-presentation allow-same-origin allow-scripts"
+        ></iframe>
+      </section>
+    </main>
+  </body>
 </html>
